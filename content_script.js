@@ -69,12 +69,25 @@ function onMouseUp() {
 
 // Функция для захвата области экрана
 function captureScreenshot(rect) {
-  chrome.runtime.sendMessage({ action: 'capture-screenshot', rect: rect }, (response) => {
+  chrome.runtime.sendMessage({ 
+    action: 'capture-screenshot', 
+    rect: {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    }
+  }, (response) => {
     if (response.success) {
-      console.log('Скриншот сохранен.');
+      removeOverlay();
     }
   });
 }
 
 // Слушаем сообщения от popup.js и background.js
-chrome.runtime.onMessage.add
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action === "take-screenshot") {
+    createOverlay();
+    document.addEventListener('mousedown', startSelecting);
+  }
+});

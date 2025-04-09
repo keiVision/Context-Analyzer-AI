@@ -2,6 +2,7 @@
     "manifest_version": 2,
     "name": "Screenshot Tool",
     "version": "1.0",
+    "description": "Расширение для создания скриншотов с помощью горячих клавиш",
     "permissions": [
       "activeTab",
       "tabs",
@@ -16,7 +17,7 @@
         "suggested_key": {
           "default": "Ctrl+Shift+F"
         },
-        "description": "Take a screenshot"
+        "description": "Сделать скриншот"
       }
     },
     "browser_action": {
