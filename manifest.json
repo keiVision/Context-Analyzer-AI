@@ -1,43 +1,17 @@
 {
-    "manifest_version": 2,
-    "name": "Screenshot Tool",
-    "version": "1.0",
-    "description": "Расширение для создания скриншотов с помощью горячих клавиш",
-    "permissions": [
-      "activeTab",
-      "tabs",
-      "storage",
-      "clipboardWrite"
-    ],
-    "background": {
-      "scripts": ["background.js"]
-    },
-    "commands": {
-      "take-screenshot": {
-        "suggested_key": {
-          "default": "Ctrl+Shift+F"
-        },
-        "description": "Сделать скриншот"
-      }
-    },
-    "browser_action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "16": "icons/icon16.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
-      }
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content_script.js"]
-      }
-    ],
-    "icons": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+  "manifest_version": 3,
+  "name": "Text Selector Assistant",
+  "version": "1.2",
+  "description": "Adds Explain and Query buttons on text selection.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_title": "Text Selector Assistant"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["style.css"]
     }
-  }
-  
+  ]
+}
