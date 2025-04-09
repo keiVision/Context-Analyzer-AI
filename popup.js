@@ -1,8 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const helloElem = document.getElementById('hello');
-    helloElem.textContent = 'Hello World!';
+document.addEventListener('DOMContentLoaded', function() {
+    const screenshotButton = document.getElementById('take-screenshot');
+  
+    screenshotButton.addEventListener('click', function() {
+      // Отправка сообщения в активную вкладку для начала действия
+      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "take-screenshot" });
+      });
+    });
   });
-
-// DOMContentLoaded: ждём загрузки DOM.
-// document.getElementById('hello'): находим элемент <h1>.
-// textContent: изменяем текст на "Hello World".
+  

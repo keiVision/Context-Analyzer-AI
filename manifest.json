@@ -1,11 +1,42 @@
 {
     "manifest_version": 2,
-    "name": "Context Analyzer Ai",
+    "name": "Screenshot Tool",
     "version": "1.0",
-    "description": "The extension will provide the ability to highlight any area on the site, and artificial intelligence will take into account the entire context of the page and respond to your request.",
-    "browser_action": {
-        "default_group": "popup.html",
-        "default_title": "Say HELLO WORLD"
+    "permissions": [
+      "activeTab",
+      "tabs",
+      "storage",
+      "clipboardWrite"
+    ],
+    "background": {
+      "scripts": ["background.js"]
     },
-    "premission": []
-}
+    "commands": {
+      "take-screenshot": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+F"
+        },
+        "description": "Take a screenshot"
+      }
+    },
+    "browser_action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+      }
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content_script.js"]
+      }
+    ],
+    "icons": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  }
+  
