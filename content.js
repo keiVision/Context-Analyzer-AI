@@ -1,6 +1,10 @@
+// content.js — исправления: кнопки исчезают при нажатии и не появляются повторно без нового выделения
+
 let timeout;
 let currentButtons;
-let fadeTimeout;
+let lastSelection = "";
+let buttonsDisabled = false;
+let lastButtonShownTime = 0;
 
 function createButtons(x, y, selectedText) {
   if (currentButtons) currentButtons.remove();
@@ -25,40 +29,26 @@ function createButtons(x, y, selectedText) {
 
   explainBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (currentButtons) {
-      currentButtons.remove();
-      currentButtons = null;
-    }
+    removeButtons();
+    buttonsDisabled = false;
     showPopupText(x, y + 30, selectedText);
   });
 
   queryBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (currentButtons) {
-      currentButtons.remove();
-      currentButtons = null;
-    }
+    removeButtons();
+    buttonsDisabled = true;
     showQueryInput(x + 100, y + 30);
   });
 
   currentButtons = container;
 }
 
-function fadeAndRemove(element) {
-  let opacity = 1;
-  const interval = setInterval(() => {
-    if (element.matches(':hover')) {
-      clearInterval(interval);
-      element.style.opacity = 1;
-      return;
-    }
-    opacity -= 0.05;
-    element.style.opacity = opacity;
-    if (opacity <= 0) {
-      clearInterval(interval);
-      element.remove();
-    }
-  }, 250);
+function removeButtons() {
+  if (currentButtons) {
+    currentButtons.remove();
+    currentButtons = null;
+  }
 }
 
 function makeDraggable(el) {
@@ -160,17 +150,21 @@ function showQueryInput(x, y) {
 
 window.addEventListener('mouseup', (event) => {
   const selection = window.getSelection();
-  if (!selection || selection.isCollapsed) return;
+  if (!selection || selection.isCollapsed || buttonsDisabled) return;
 
+  const selectedText = selection.toString();
   const range = selection.getRangeAt(0);
   const rects = range.getClientRects();
   const lastRect = rects[rects.length - 1];
-  const selectedText = selection.toString();
+  if (!lastRect || selectedText === lastSelection) return;
 
+  lastSelection = selectedText;
   clearTimeout(timeout);
   timeout = setTimeout(() => {
-    if (currentButtons) return; // Prevent respawning if already visible
+    const now = Date.now();
+    if (now - lastButtonShownTime < 1000) return;
     createButtons(lastRect.right, lastRect.bottom, selectedText);
+    lastButtonShownTime = now;
   }, 300);
 });
 
